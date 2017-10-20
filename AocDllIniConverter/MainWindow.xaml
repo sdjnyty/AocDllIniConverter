@@ -1,0 +1,30 @@
+﻿<Window x:Class="YTY.AocDllIniConverter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YTY.AocDllIniConverter"
+        mc:Ignorable="d"
+        Title="帝国时代2 语言Dll与ini文本转换器"
+        Height="350"
+        Width="525">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    <TextBlock Grid.Row="0"
+               HorizontalAlignment="Center">
+      <Span Foreground="Red">【用法说明】</Span>      <LineBreak></LineBreak>
+      dll 转换为 ini 功能中，可以选择多个文件，每个文件会在导出的ini中形成一节。<LineBreak></LineBreak>
+      ini 转换为 dll 功能中，ini可以包含多节，每节将导出为一个dll文件，节名称为dll文件名。
+    </TextBlock>
+    <Button Grid.Row="1"
+            Content="dll 转换为 ini"
+            Command="{x:Static local:Commands.DllToIni}"></Button>
+    <Button Grid.Row="2"
+            Content="ini 转换为 dll"
+            Command="{x:Static local:Commands.IniToDll}"></Button>
+  </Grid>
+</Window>
