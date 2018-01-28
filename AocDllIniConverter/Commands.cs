@@ -48,7 +48,7 @@ namespace YTY.AocDllIniConverter
         int count = 0;
 
         var ini = new IniParser.Model.IniData();
-        ini.Configuration.AssigmentSpacer = string.Empty;
+        ini.Configuration.AssigmentSpacer =string.Empty;
 
         foreach (var dll in dllFileNames)
         {
@@ -56,11 +56,14 @@ namespace YTY.AocDllIniConverter
           ri.Load(dll);
 
           var languages = ri[Kernel32.ResourceTypes.RT_STRING]
-            .GroupBy(r=>r.Language);
+            .GroupBy(r => r.Language);
           foreach (var language in languages)
           {
             var fileName = Path.GetFileNameWithoutExtension(dll);
-            var culture = System.Globalization.CultureInfo.GetCultureInfo(language.Key).Name;
+            var ci = language.Key == 0
+              ? System.Globalization.CultureInfo.InvariantCulture
+              : System.Globalization.CultureInfo.GetCultureInfo(language.Key);
+            var culture =ci.Name;
             var extension = Path.GetExtension(dll);
             var section = ini[$"{fileName}_{culture}{extension}"];
             foreach (StringResource resource in language)
@@ -97,7 +100,6 @@ namespace YTY.AocDllIniConverter
         };
         if (ofn.ShowDialog() == true)
         {
-          var outputPath = $"{DateTime.Now:yyyyMMdd-hhmmss}.ini";
           var result = ParseIniToDll(ofn.FileName);
           MessageBox.Show(string.Join("\n", result.Select(tup => $"已导出 {tup.Item2} 条字串到 {tup.Item1}")));
         }
@@ -110,6 +112,8 @@ namespace YTY.AocDllIniConverter
         var parser = new FileIniDataParser();
         parser.Parser.Configuration.AllowDuplicateKeys = true;
         parser.Parser.Configuration.OverrideDuplicateKeys = true;
+        parser.Parser.Configuration.AssigmentSpacer = string.Empty;
+        parser.Parser.Configuration.SkipInvalidLines = true;
 
         var ini = parser.ReadFile(iniFileName, Encoding.UTF8);
         var dirName = Path.GetFileNameWithoutExtension(iniFileName);
